@@ -143,7 +143,7 @@ def plot_lipid_vs_fullness_hist(ax_main, ax_histx, ax_histy, df, stage, lipids_m
 
 
 
-#### Figure 1: scatter plot and histograms per stage CV and Females (Carbon Area - Ikeda)
+#### Figure 1: scatter plot and histograms per stage CV and Females (Carbon Area)
 
 fig = plt.figure(figsize=(14, 6)) 
 gs = gridspec.GridSpec(3, 6, figure=fig, width_ratios=[4, 1.5, 0.2, 4, 1.5, 0.5], height_ratios=[0.5, 1.5, 4], wspace=0.3, hspace=0.3)
@@ -194,7 +194,7 @@ plt.savefig("Lipids_against_fullness_hist_CV_Females_August_LOKI2013_Carbon_Area
 plt.show()
 
 
-#### Figure 2: scatter plot and histograms per stage CV and Females (Carbon Volume - Ikeda)
+#### Figure 2: scatter plot and histograms per stage CV and Females (Carbon Volume)
 
 fig = plt.figure(figsize=(14, 6)) 
 gs = gridspec.GridSpec(3, 6, figure=fig, width_ratios=[4, 1.5, 0.2, 4, 1.5, 0.5], height_ratios=[0.5, 1.5, 4], wspace=0.3, hspace=0.3)
