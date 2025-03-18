@@ -9,6 +9,8 @@ Python scripts are listed in order of use. At the beginning of each script a bri
 
 References are added as comments when necessary, especially for features computation (01_compute_prosome_lipids_features.py).
 
+The two folders *Images_with_masks* and *Masks_with_major_minor_axis* contain exemples for 10 LOKI images. Original images are all in an Ecotaxa project.
+
 ## References    
 
 Ikeda, T., and Skjoldal, H. R. (1989). Metabolism and elemental composition of zooplankton from the Barents Sea during early Arctic summer. Marine Biology 100, 173–183. doi: 10.1007/BF00391956     
