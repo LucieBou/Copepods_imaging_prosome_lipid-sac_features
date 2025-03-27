@@ -82,7 +82,7 @@ def lipid_mm2_to_mg(lipid_area):
         Total lipid content in mg.
 
     """
-    total_lipids_mg = 0.197 * lipid_area**(1.38)
+    total_lipids_mg = 0.167 * lipid_area**(1.42)
     return total_lipids_mg
 
 

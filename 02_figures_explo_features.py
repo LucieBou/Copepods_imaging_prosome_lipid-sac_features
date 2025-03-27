@@ -37,7 +37,7 @@ species_list = ["Calanus hyperboreus", "Calanus glacialis"]
 lipids_min = df['total_lipids_ugC'].min()
 lipids_max = df['total_lipids_ugC'].max() + 50
 
- 
+
 def plot_lipid_vs_fullness_hist(ax_main, ax_histx, ax_histy, df, stage, lipids_min, lipids_max, equation_ref):
     """
     Plot lipid content in carbon against fullness ratio in a scatter plot with the associated
@@ -99,8 +99,6 @@ def plot_lipid_vs_fullness_hist(ax_main, ax_histx, ax_histy, df, stage, lipids_m
                    
     ax_histx.spines['top'].set_visible(False)
     ax_histx.spines['right'].set_visible(False)
-    ax_histx.tick_params(axis='x', labelbottom=False)
-    ax_histx.tick_params(axis='y', left=False)
 
     # Scatter plot (nuage de points)
     ax_main.scatter(hyp_total_lipids_ugC, 
@@ -120,7 +118,7 @@ def plot_lipid_vs_fullness_hist(ax_main, ax_histx, ax_histy, df, stage, lipids_m
     ax_main.set_xlabel("Total Lipids (ugC)")
     ax_main.set_ylabel(f"Fullness Ratio ({equation_ref})")
         
-    ax_main.set_xlim([lipids_min, lipids_max])
+    ax_main.set_xlim([0, lipids_max+20])
     ax_main.set_ylim([0, 1])
     
     ax_main.spines['top'].set_visible(False)
@@ -138,9 +136,6 @@ def plot_lipid_vs_fullness_hist(ax_main, ax_histx, ax_histy, df, stage, lipids_m
     
     ax_histy.spines['top'].set_visible(False)
     ax_histy.spines['right'].set_visible(False)
-    ax_histy.tick_params(axis='y', labelleft=False)
-    ax_histy.tick_params(axis='x', bottom=False)
-
 
 
 #### Figure 1: scatter plot and histograms per stage CV and Females (Carbon Area)
