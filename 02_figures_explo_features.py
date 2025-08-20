@@ -11,6 +11,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.lines import Line2D
+from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import Patch
+from matplotlib.legend_handler import HandlerTuple
 import numpy as np
 
 df = pd.read_csv("./merged_LOKI2013_ecotaxa_masks_features.csv")
@@ -307,4 +310,256 @@ plt.tight_layout()
 
 plt.savefig("Lipids_against_fullness_hist_CIV_CV_Females_August_LOKI2013_Carbon_Volume.png")
 
+plt.show()
+
+#### Figure 4: Fullness ratio (area) against prosome length 
+
+df['stage'] = df['object_annotation_category'].str.extract(r'^(.*?)\+')[0]
+df['species'] = df['object_annotation_category'].str.extract(r'<([^<]+)$')[0]
+
+smooth_green_blue = LinearSegmentedColormap.from_list(
+    "smooth_green_blue",
+    ['azure', '#a0ddc0', '#5fcab4', '#006eca']
+)
+colors_hyp = [smooth_green_blue(i) for i in np.linspace(0.0, 0.9, 7)]
+
+smooth_orange_red = LinearSegmentedColormap.from_list(
+    "smooth_orange_red",
+    ['#fffff0', '#FFEE74', '#feb24c', '#e34a33']
+)
+colors_gla = [smooth_orange_red(i) for i in np.linspace(0.0, 0.9, 7)]
+
+# Take only the 3 last values for the 3 older stages
+colors_hyp_stage = colors_hyp[-3:]
+colors_gla_stage = colors_gla[-3:]
+
+stage_labels = ['C4', 'C5', 'AF']
+
+stage_to_idx = {
+    'civstage': 0,  #C4
+    'cvstage': 1,   #C5
+    'female': 2     #AF
+}
+
+markers = {
+    'civstage': 'D',
+    'cvstage': '^',
+    'female': 'o'
+}
+
+fig, ax = plt.subplots(figsize=(8, 6))
+for species in ['Calanus hyperboreus', 'Calanus glacialis']:
+    for stage, group in df[df['species'] == species].groupby('stage'):
+        idx = stage_to_idx.get(stage, None)
+        if idx is None:
+            color = 'grey'
+        else:
+            if species == 'Calanus hyperboreus':
+                color = colors_hyp_stage[idx]
+            elif species == 'Calanus glacialis':
+                color = colors_gla_stage[idx]
+            else:
+                color = 'grey'
+            marker = markers.get(stage, 'o')
+
+        ax.scatter(
+            group['prosome_major_axis_mm'],
+            group['fullness_ratio_area'],
+            color=color,
+            # facecolor=color,
+            edgecolor='none',
+            marker=marker,
+            label=f"{stage} - {species}",
+            alpha=0.8,
+            s=30
+        )
+
+# Legend and labels
+
+legend_handles = []
+stage_keys = ['civstage', 'cvstage', 'female'] 
+    
+for stage in stage_keys:
+    idx = stage_to_idx[stage]
+    # Patch Hyperboreus 
+    handle_hyp = Line2D(
+        [0], [0],
+        marker=markers[stage],
+        markerfacecolor=colors_hyp_stage[idx],
+        markeredgecolor='none',
+        markersize=7,
+        linestyle='None'
+    )
+    # Patch Glacialis
+    handle_gla = Line2D(
+        [0], [0],
+        marker=markers[stage],
+        markerfacecolor=colors_gla_stage[idx],
+        markeredgecolor='none',
+        markersize=7,
+        linestyle='None'
+    )
+    legend_handles.append((handle_hyp, handle_gla))
+    
+fig.legend(
+    legend_handles,
+    stage_labels,
+    handler_map={tuple: HandlerTuple(ndivide=None)},
+    loc='center right',
+    bbox_to_anchor=(1, 0.5),
+    frameon=False,
+)
+
+fig.text(
+    0.91,    
+    0.56,    
+    r'$C.\ hyperboreus$', 
+    rotation=90, 
+    fontsize=10, 
+    va='bottom', 
+    ha='left',
+    style='italic'
+)
+
+fig.text(
+    0.935,    
+    0.56,    
+    r'$C.\ glacialis$', 
+    rotation=90, 
+    fontsize=10, 
+    va='bottom', 
+    ha='left',
+    style='italic'
+)
+
+ax.spines['top'].set_visible(False) 
+ax.spines['right'].set_visible(False)
+ax.set_xlim([2,8])
+ax.set_ylim([0,0.8])
+ax.set_xlabel('Prosome length (mm)')
+ax.set_ylabel('Lipid fullness (LSA:PA)')
+plt.savefig("FullnessRatio_against_PL_CIV_CV_Females_August_LOKI2013.png", dpi=600)
+plt.show()
+
+
+#### Figure 5: lipid sac volume against prosome length
+
+fig, ax = plt.subplots(figsize=(8, 6))
+for species in ['Calanus hyperboreus', 'Calanus glacialis']:
+    for stage, group in df[df['species'] == species].groupby('stage'):
+        idx = stage_to_idx.get(stage, None)
+        if idx is None:
+            color = 'grey'
+        else:
+            if species == 'Calanus hyperboreus':
+                color = colors_hyp_stage[idx]
+            elif species == 'Calanus glacialis':
+                color = colors_gla_stage[idx]
+            else:
+                color = 'grey'
+            marker = markers.get(stage, 'o')
+
+        ax.scatter(
+            group['prosome_major_axis_mm'],
+            group['lipid_volume_mm3'],
+            color=color,
+            edgecolor='none',
+            marker=marker,
+            label=f"{stage} - {species}",
+            alpha=0.8,
+            s=30
+        )
+
+# Legend and labels
+
+legend_handles = []
+stage_keys = ['civstage', 'cvstage', 'female']
+    
+for stage in stage_keys:
+    idx = stage_to_idx[stage]
+    # Patch Hyperboreus 
+    handle_hyp = Line2D(
+        [0], [0],
+        marker=markers[stage],
+        markerfacecolor=colors_hyp_stage[idx],
+        markeredgecolor='none',
+        markersize=7,
+        linestyle='None'
+    )
+    # Patch Glacialis
+    handle_gla = Line2D(
+        [0], [0],
+        marker=markers[stage],
+        markerfacecolor=colors_gla_stage[idx],
+        markeredgecolor='none',
+        markersize=7,
+        linestyle='None'
+    )
+    legend_handles.append((handle_hyp, handle_gla))
+    
+fig.legend(
+    legend_handles,
+    stage_labels,
+    handler_map={tuple: HandlerTuple(ndivide=None)},
+    loc='center right',
+    bbox_to_anchor=(1, 0.5),
+    frameon=False,
+)
+
+fig.text(
+    0.91,    
+    0.56,    
+    r'$C.\ hyperboreus$', 
+    rotation=90, 
+    fontsize=10, 
+    va='bottom', 
+    ha='left',
+    style='italic'
+)
+
+fig.text(
+    0.935,    
+    0.56,    
+    r'$C.\ glacialis$', 
+    rotation=90, 
+    fontsize=10, 
+    va='bottom', 
+    ha='left',
+    style='italic'
+)
+
+ax.spines['top'].set_visible(False) 
+ax.spines['right'].set_visible(False)
+ax.set_xlim([2,8])
+ax.set_ylim([0,10])
+ax.set_xlabel('Prosome length (mm)')
+ax.set_ylabel('Lipid sac volume (mm3)')
+plt.savefig("LipidSacVolume_against_PL_CIV_CV_Females_August_LOKI2013.png", dpi=600)
+plt.show()
+
+
+#### Figure 6: Lipid sac volume from ellispe VS cylinder
+
+df['lipid_volume_mm3_cylinder'] = (np.pi * df['lipid_area_mm2']**2) / (4 * df['lipid_major_axis_mm'])
+
+
+plt.scatter(df['lipid_volume_mm3_cylinder'], df['lipid_volume_mm3'], edgecolor='black', facecolor='none')
+
+min_val = min(df['lipid_volume_mm3_cylinder'].min(), df['lipid_volume_mm3'].min())
+max_val = max(df['lipid_volume_mm3_cylinder'].max(), df['lipid_volume_mm3'].max())
+lims = [min_val, max_val+0.5]
+
+plt.plot(lims, lims, 'k--')
+
+plt.xlabel("Lipid sac volume (mm3) - Cylinder")
+plt.ylabel("Lipid sac volume (mm3) - Ellipse")
+
+# Mettre un aspect égal
+plt.gca().set_aspect('equal', adjustable='box')
+
+# Limites égales sur x et y
+plt.xlim(lims)
+plt.ylim(lims)
+
+plt.savefig("LipidSacVolume_from_cylinderVSellipse_CIV_CV_Females_August_LOKI2013.png", dpi=600)
 plt.show()
