@@ -295,9 +295,8 @@ data['lipid_volume_mm3'] = data.apply(
 )
 
 ## Fullness ratio carbon volume
-data['total_lipids_carbon_volume'] = 0.79 * data['lipid_volume_mm3'] # Tarling et al., 2022
 data['prosome_carbon_volume'] = (data["prosome_volume_mm3"] - data['lipid_volume_mm3']) * 0.2 * 0.45 # Ikeda & Skjoldal., 1989
-data['fullness_ratio_carbon_volume'] = data['total_lipids_carbon_volume'] / (data['prosome_carbon_volume'] + data['total_lipids_carbon_volume'])
+data['fullness_ratio_carbon_volume'] = (0.79*data['total_lipids_mg']) / (data['prosome_carbon_volume'] + (0.79*data['total_lipids_mg']))
 
 ## Remove ind from profiles 2013-08-16	2013-08-18 (only 13 individuals)
 dates_to_remove = ["2013-08-16", "2013-08-18"]

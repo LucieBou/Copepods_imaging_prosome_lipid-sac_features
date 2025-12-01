@@ -563,3 +563,46 @@ plt.ylim(lims)
 
 plt.savefig("LipidSacVolume_from_cylinderVSellipse_CIV_CV_Females_August_LOKI2013.png", dpi=600)
 plt.show()
+
+#### Figure 7: Fullness from lipid_volume_mm3 and total_lipids_mg comparison
+
+df['prosome_carbon_mass'] = (df["prosome_volume_mm3"] - df['lipid_volume_mm3']) * 1 * 0.09
+
+df['prosome_carbon_mass'] = 0.72*((df["prosome_volume_mm3"] - df['lipid_volume_mm3']) * 1 * 0.2 )-0.35525
+df['fullness_2'] = (0.79 * df['total_lipids_mg']) / (df['prosome_carbon_mass'] + (0.79 * df['total_lipids_mg']))
+
+data_at_stage = df[df['object_annotation_category'].str.contains('female', case=False, na=False)]
+    
+data_hyperboreus = data_at_stage[data_at_stage['object_annotation_category'].str.contains('hyperboreus', case=False, na=False)]
+data_glacialis = data_at_stage[data_at_stage['object_annotation_category'].str.contains('glacialis', case=False, na=False)]
+
+fig, ax = plt.subplots(figsize=(14, 6)) 
+
+ax.scatter(data_hyperboreus['total_lipids_ugC'], data_hyperboreus['fullness_ratio_carbon_volume'], c='#5fcab4', marker='o', label='C. hyp F volume')
+ax.scatter(data_hyperboreus['total_lipids_ugC'], data_hyperboreus['fullness_2'], c='#5fcab4', marker='x', label='C. hyp F mg')
+
+ax.scatter(data_glacialis['total_lipids_ugC'], data_glacialis['fullness_ratio_carbon_volume'], c='#feb24c', marker='o', label='C. gla F volume')
+ax.scatter(data_glacialis['total_lipids_ugC'], data_glacialis['fullness_2'], c='#feb24c', marker='x', label='C. gla F mg')
+
+ax.set_xlabel('Lipid reserves (ugC)')
+ax.set_ylabel('Lipid fullness')
+
+ax.legend()
+
+plt.show()
+
+
+#### Figure 8: total_lipids_ugC VS total_lipids_carbon_volume
+
+fig, ax = plt.subplots(figsize=(14, 6)) 
+
+ax.scatter(data_hyperboreus['total_lipids_ugC'], data_hyperboreus['total_lipids_carbon_volume'], c='#5fcab4', marker='o', label='C. hyp')
+
+ax.scatter(data_glacialis['total_lipids_ugC'], data_glacialis['total_lipids_carbon_volume'], c='#feb24c', marker='o', label='C. gla')
+
+ax.set_xlabel('total_lipids_ugC')
+ax.set_ylabel('total_lipids_carbon_volume')
+
+ax.legend()
+
+plt.show()
