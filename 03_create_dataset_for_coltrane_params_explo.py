@@ -9,7 +9,6 @@ Simply to keep only the necessary variables in the dataframe.
 """
 
 import pandas as pd
-from datetime import datetime
 
 df = pd.read_csv("merged_LOKI2013_ecotaxa_masks_features.csv")
 
@@ -17,7 +16,7 @@ df['object_date'] = pd.to_datetime(df['object_date'])
 df['month_true'] = df['object_date'].dt.month
 df['month'] = 8
 
-to_keep = ['object_annotation_category', 'total_lipids_ugC', 'fullness_ratio_carbon_volume', 'month', 'month_true']
+to_keep = ['object_annotation_category', 'total_lipids_ugC', 'fullness_ratio_carbon', 'month', 'month_true']
 
 df_final = df[to_keep]
 

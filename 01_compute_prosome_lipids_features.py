@@ -241,11 +241,6 @@ data['total_lipids_ugC'] = data['total_lipids_mg'] * 0.79 * 1000 # Tarling et al
 ## Fullness ratio area
 data['fullness_ratio_area'] = data['lipid_area_mm2'] / data['prosome_area_mm2']
 
-## Fullness ratio carbon area
-data['total_lipids_carbon_area'] = 0.79 * data['lipid_area_mm2'] # Tarling et al., 2022
-data['prosome_carbon_area'] = (data["prosome_area_mm2"] - data['lipid_area_mm2']) * 0.2 * 0.45 # Ikeda & Skjoldal, 1989
-data['fullness_ratio_carbon_area'] = data['total_lipids_carbon_area'] / (data['prosome_carbon_area'] + data['total_lipids_carbon_area'])
-
 ## Major and minor axis of lipid and prosome mask to compute their volume
 data[['prosome_major_end_1', 'prosome_major_end_2', 'prosome_major_axis_mm', 'prosome_centroid']] = data.apply(
     lambda row: pd.Series(major_axis(row['prosome_polygon_points_px'], 0.023)),
@@ -295,8 +290,8 @@ data['lipid_volume_mm3'] = data.apply(
 )
 
 ## Fullness ratio carbon volume
-data['prosome_carbon_volume'] = (data["prosome_volume_mm3"] - data['lipid_volume_mm3']) * 0.2 * 0.45 # Ikeda & Skjoldal., 1989
-data['fullness_ratio_carbon_volume'] = (0.79*data['total_lipids_mg']) / (data['prosome_carbon_volume'] + (0.79*data['total_lipids_mg']))
+data['prosome_structural_carbon'] = (data["prosome_volume_mm3"] - data['lipid_volume_mm3']) * 0.2 * 0.45 # Ikeda & Skjoldal., 1989
+data['fullness_ratio_carbon'] = (0.79*data['total_lipids_mg']) / (data['prosome_structural_carbon'] + (0.79*data['total_lipids_mg']))
 
 ## Remove ind from profiles 2013-08-16	2013-08-18 (only 13 individuals)
 dates_to_remove = ["2013-08-16", "2013-08-18"]
